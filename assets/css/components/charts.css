@@ -17,7 +17,7 @@
 }
 
 .heatmap-table th {
-    font-size: 11.5px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -27,17 +27,16 @@
     white-space: nowrap;
 }
 
-.heatmap-table th:first-child,
-.heatmap-table th:nth-child(2) {
+.heatmap-table th:first-child {
     text-align: left;
 }
 
 .heatmap-table td {
     text-align: center;
-    font-size: 12px;
-    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    padding: 8px 6px;
+    padding: 6px 4px;
     border-radius: 6px;
     transition: transform 0.15s;
     white-space: nowrap;
@@ -45,19 +44,14 @@
 
 .heatmap-table td:first-child {
     text-align: left;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12.5px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text-secondary);
     padding-left: 0;
 }
 
-.heatmap-table td:nth-child(2) {
-    text-align: right;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text-muted);
-}
+
 
 .heatmap-table td.hm-cell {
     cursor: default;
@@ -74,6 +68,69 @@
     padding: 1.25rem 1.5rem;
     min-height: 360px;
     position: relative;
+}
+
+.rfm-grid {
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    /* Custom masonry-like layout based on reference image 2 */
+    grid-template-areas:
+        "cnpp cnpp cnpp cf cf cf cf cf cf ca  ca  ca "
+        "cnpp cnpp cnpp cf cf cf cf cf cf ca  ca  ca "
+        "cr   cr   cr   cf cf cf cf cf cf ca  ca  ca "
+        "cr   cr   cr   cf cf cf cf cf cf ca  ca  ca "
+        "cp   cp   cp   cpa cpa cpa cpa fp fp fp fp fp"
+        "cp   cp   cp   cpa cpa cpa cpa fp fp fp fp fp"
+        "cp   cp   cp   ch  ch  ch  ch  fp fp fp fp fp"
+        "cp   cp   cp   cqd cqd cqd cqd fp fp fp fp fp"
+        "cp   cp   cp   cqd cqd cqd cqd fp fp fp fp fp"
+        "cp   cp   cp   cpr cpr cpr cpr nc nc nc nc nc"
+        "cp   cp   cp   cpr cpr cpr cpr nc nc nc nc nc";
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(11, 1fr);
+}
+
+.rfm-grid-card {
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s, box-shadow 0.2s;
+    cursor: default;
+    padding: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.rfm-grid-card:hover {
+    transform: scale(1.05) translateY(-2px);
+    z-index: 10;
+    filter: brightness(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.rfm-card-title {
+    font-size: 13.5px;
+    font-weight: 650;
+    line-height: 1.25;
+    margin-bottom: 6px;
+}
+
+.rfm-card-val {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.rfm-card-pct {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-top: 4px;
 }
 
 /* ── US Map ──────────────────────────────────────────────────────────────── */
@@ -97,7 +154,7 @@
     color: #fff;
     padding: 8px 12px;
     border-radius: var(--radius-sm);
-    font-size: 12px;
+    font-size: 14px;
     pointer-events: none;
     z-index: 9999;
     box-shadow: var(--shadow-lg);
@@ -115,8 +172,8 @@
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: var(--radius-md) !important;
     padding: 10px 14px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 13px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 14px !important;
     color: #fff !important;
     box-shadow: var(--shadow-lg) !important;
 }

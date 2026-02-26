@@ -16,71 +16,46 @@ function initRFMTreemap() {
     if (!container || container.dataset.built) return;
     container.dataset.built = '1';
 
-    const W = container.clientWidth || 700;
-    const H = 380;
+    // Clear loading/previous content if any
+    container.innerHTML = '';
 
-    const svg = d3.select(container).append('svg')
-        .attr('width', '100%')
-        .attr('height', H)
-        .attr('viewBox', `0 0 ${W} ${H}`);
+    // Create the outer grid wrapper
+    const gridDiv = document.createElement('div');
+    gridDiv.className = 'rfm-grid';
 
-    const root = d3.hierarchy({ children: RFM_SEGMENTS })
-        .sum(d => d.value)
-        .sort((a, b) => b.value - a.value);
+    // Calculate total to get percentage
+    const totalUsers = RFM_SEGMENTS.reduce((sum, seg) => sum + seg.value, 0);
 
-    d3.treemap().size([W, H]).padding(3).round(true)(root);
+    // Build each card using the gridArea assigned in data.js
+    RFM_SEGMENTS.forEach(seg => {
+        const card = document.createElement('div');
+        card.className = 'rfm-grid-card';
+        card.style.gridArea = seg.gridArea;
+        card.style.backgroundColor = seg.color;
+        card.style.color = seg.textColor || '#ffffff'; // Fallback to white if no explicit text color
 
-    const tooltip = d3.select('body').append('div')
-        .attr('class', 'map-tooltip')
-        .style('pointer-events', 'none');
+        const pct = ((seg.value / totalUsers) * 100).toFixed(0);
 
-    const cell = svg.selectAll('g')
-        .data(root.leaves())
-        .join('g')
-        .attr('transform', d => `translate(${d.x0},${d.y0})`);
+        // Dynamically shrink typography on tiny cards using gridArea mapping
+        // 'cnpp', 'cpr', 'cpa' often take small squares in the grid.
+        let fontSizeTitle = '13.5px';
+        let fontSizeVal = '24px';
 
-    /* Cells */
-    cell.append('rect')
-        .attr('width', d => d.x1 - d.x0)
-        .attr('height', d => d.y1 - d.y0)
-        .attr('rx', 8)
-        .attr('fill', d => d.data.color)
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 2)
-        .style('cursor', 'pointer')
-        .on('mouseover', function (event, d) {
-            d3.select(this).attr('opacity', 0.85);
-            tooltip.html(`<strong>${d.data.name}</strong><br/>Clientes: ${d.data.value.toLocaleString('pt-BR')}`)
-                .classed('visible', true);
-        })
-        .on('mousemove', event => {
-            tooltip.style('left', (event.clientX + 12) + 'px').style('top', (event.clientY - 36) + 'px');
-        })
-        .on('mouseleave', function () {
-            d3.select(this).attr('opacity', 1);
-            tooltip.classed('visible', false);
-        });
+        if (['cpr', 'cnpp', 'nc'].includes(seg.gridArea)) {
+            fontSizeTitle = '11.5px';
+            fontSizeVal = '16px';
+        }
 
-    /* Label: segment name */
-    cell.append('text')
-        .attr('x', d => (d.x1 - d.x0) / 2)
-        .attr('y', d => (d.y1 - d.y0) / 2 - 6)
-        .attr('text-anchor', 'middle')
-        .attr('fill', '#fff')
-        .attr('font-family', "'DM Sans', sans-serif")
-        .attr('font-size', d => (d.x1 - d.x0) > 120 ? 13 : 10)
-        .attr('font-weight', '600')
-        .text(d => (d.x1 - d.x0) > 70 ? d.data.name : '');
+        card.innerHTML = `
+            <div class="rfm-card-title" style="font-size: ${fontSizeTitle}">${seg.name}</div>
+            <div class="rfm-card-val" style="font-size: ${fontSizeVal}">${seg.value}</div>
+            <div class="rfm-card-pct">${pct}%</div>
+        `;
 
-    /* Label: client count */
-    cell.append('text')
-        .attr('x', d => (d.x1 - d.x0) / 2)
-        .attr('y', d => (d.y1 - d.y0) / 2 + 12)
-        .attr('text-anchor', 'middle')
-        .attr('fill', 'rgba(255,255,255,0.75)')
-        .attr('font-family', "'DM Mono', monospace")
-        .attr('font-size', 11)
-        .text(d => (d.x1 - d.x0) > 90 ? d.data.value.toLocaleString() : '');
+        gridDiv.appendChild(card);
+    });
+
+    container.appendChild(gridDiv);
 }
 
 /* ── RFM chart initialiser ───────────────────────────────────────────────── */

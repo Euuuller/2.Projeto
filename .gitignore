@@ -1,0 +1,48 @@
+# Arquivos de Dados (Excel e CSV)
+*.csv
+*.xls
+*.xlsx
+*.xlsm
+
+# Pastas comuns para dados (caso você os coloque dentro de alguma delas)
+data/
+dados/
+dataset/
+datasets/
+
+# Arquivos gerados pelo Sistema Operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs e dependências (Node.js, se for usar no futuro)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Variáveis de Ambiente
+.env
+.env.local
+.env.*.local
+
+# Configurações de Editores de Código (VS Code, IntelliJ, etc)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# Outros arquivos temporários ou de build
+dist/
+build/
+.cache/
+.parcel-cache/

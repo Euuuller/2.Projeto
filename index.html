@@ -17,11 +17,11 @@
     <meta property="og:description" content="Plataforma de inteligência de dados para decisões extraordinárias." />
     <meta property="og:type" content="website" />
 
-    <!-- Google Fonts: DM Sans · Playfair Display · DM Mono -->
+    <!-- Google Fonts: Plus Jakarta Sans · Cormorant Garamond · JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
 
     <!-- Third-party: Chart.js + datalabels plugin -->
@@ -329,7 +329,7 @@
                 <div class="page-header">
                     <div>
                         <h1 class="page-title">Análise de Cohort</h1>
-                        <p class="page-subtitle">Acompanhe retenção e comportamento de grupos ao longo do tempo</p>
+                        <p class="page-subtitle">Acompanhamento de comportamento de clientes ao longo do tempo (Janeiro 2014 - Dezembro 2014)</p>
                     </div>
                 </div>
                 <p class="intro-text">A análise de Cohort agrupa clientes pelo mês de primeira compra, permitindo
@@ -406,20 +406,20 @@
                     <div class="section-card">
                         <div class="section-card-header">
                             <div>
-                                <h3 class="section-card-title">Retenção Média por Mês</h3><span
-                                    class="section-card-sub">Média de todos os cohorts</span>
+                                <h3 class="section-card-title">Curva de Retenção por Cohort</h3><span
+                                    class="section-card-sub">Evolução do percentual de usuários ativos por mês</span>
                             </div>
                         </div>
-                        <div class="chart-wrap"><canvas id="cohortLineChart"></canvas></div>
+                        <div class="chart-wrap chart-wrap--tall"><canvas id="cohortLineChart"></canvas></div>
                     </div>
                     <div class="section-card">
                         <div class="section-card-header">
                             <div>
-                                <h3 class="section-card-title">Usuários por Cohort</h3><span
-                                    class="section-card-sub">Volume de novos clientes adquiridos</span>
+                                <h3 class="section-card-title">Retenção Mês 1 por Cohort</h3><span
+                                    class="section-card-sub">Porcentagem de usuários retidos no primeiro mês</span>
                             </div>
                         </div>
-                        <div class="chart-wrap"><canvas id="cohortBarChart"></canvas></div>
+                        <div class="chart-wrap chart-wrap--tall"><canvas id="cohortBarChart"></canvas></div>
                     </div>
                 </div>
             </div>

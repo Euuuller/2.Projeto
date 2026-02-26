@@ -23,26 +23,23 @@ function initCohortHeatmap() {
       <thead>
         <tr>
           <th>Cohort</th>
-          <th style="text-align:right">Usuários</th>
           ${monthHeaders.map(m => `<th>${m}</th>`).join('')}
         </tr>
       </thead>
       <tbody>`;
 
     COHORT_DATA.months.forEach((month, i) => {
-        const users = COHORT_DATA.users[i].toLocaleString('pt-BR');
         const row = COHORT_DATA.retention[i];
 
         html += `<tr>
-      <td>${month}</td>
-      <td style="text-align:right;font-family:'DM Mono',monospace;font-size:12px;color:#64748B">${users}</td>`;
+      <td>${month}</td>`;
 
         monthHeaders.forEach((_, j) => {
             if (j < row.length) {
                 const pct = row[j];
                 html += `<td class="hm-cell"
                      style="background:${heatmapColor(pct)};color:${textColorForBg(pct)}"
-                     title="${month} · M${j}: ${pct}%">${pct}%</td>`;
+                     title="${month} · M${j}: ${pct.toFixed(2)}%">${pct.toFixed(2)}%</td>`;
             } else {
                 html += `<td></td>`;
             }
@@ -66,80 +63,142 @@ function initCohortHeatmap() {
 function initCohortCharts() {
     initCohortHeatmap();
 
-    /* ── Average retention line ── */
-    const avgRetention = [];
-    for (let m = 0; m < 12; m++) {
-        let sum = 0, cnt = 0;
-        COHORT_DATA.retention.forEach(row => {
-            if (row[m] !== undefined) { sum += row[m]; cnt++; }
-        });
-        avgRetention.push(cnt ? Math.round(sum / cnt) : null);
-    }
+    // 12 specific colors mapped to cohorts as per reference
+    const cohortColors = [
+        '#2b82c9', // 2014-01 (Blue)
+        '#66a827', // 2014-02 (Green)
+        '#f59d16', // 2014-03 (Orange)
+        '#27befa', // 2014-04 (Light Blue)
+        '#ffa726', // 2014-05 (Orange/Amber)
+        '#ef5350', // 2014-06 (Red)
+        '#2ea9f5', // 2014-07 (Blue)
+        '#66bb6a', // 2014-08 (Green)
+        '#42a5f5', // 2014-09 (Blue)
+        '#ffb300', // 2014-10 (Amber)
+        '#4caf50', // 2014-11 (Green)
+        '#9e9e9e'  // 2014-12 (Grey/Neutral)
+    ];
+
+    /* ── Retention Curve per Cohort (Line Chart) ── */
+    const lineDatasets = COHORT_DATA.months.map((month, i) => {
+        // Pad data with nulls at the beginning (offset by month index if shifting was needed, 
+        // but here all cohorts start at M0 on the x-axis, just different lengths)
+        const data = COHORT_DATA.retention[i].slice();
+
+        return {
+            label: month,
+            data: data,
+            borderColor: cohortColors[i],
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointBackgroundColor: cohortColors[i],
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            fill: false,
+            tension: 0.4,
+            spanGaps: true,
+        };
+    });
 
     const ctxLine = document.getElementById('cohortLineChart').getContext('2d');
-    const gradLine = gradientV(ctxLine, hexAlpha(COLORS.indigo, 0.3), hexAlpha(COLORS.indigo, 0.0));
 
     registerChart('cohortLine', new Chart(ctxLine, {
         type: 'line',
         data: {
-            labels: ['M0', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11'],
-            datasets: [{
-                label: 'Retenção Média (%)',
-                data: avgRetention,
-                borderColor: COLORS.indigo,
-                backgroundColor: gradLine,
-                borderWidth: 2.5,
-                pointBackgroundColor: COLORS.indigo,
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                fill: true,
-                tension: 0.4,
-                spanGaps: true,
-            }],
+            labels: ['Mês 0', 'Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 'Mês 7', 'Mês 8', 'Mês 9', 'Mês 10', 'Mês 11'],
+            datasets: lineDatasets,
         },
         options: {
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false, // Allows chart to fill its taller container
             plugins: {
-                legend: { display: false },
-                tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}%` } },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 12,
+                        usePointStyle: true,
+                        padding: 16,
+                        font: { size: 11, family: "'Plus Jakarta Sans', sans-serif" }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)', // Darker, sleeker background
+                    titleColor: '#ffffff',
+                    bodyColor: '#cbd5e1',
+                    borderColor: 'rgba(255, 255, 255, 0.08)',
+                    borderWidth: 1,
+                    padding: 10,
+                    boxPadding: 4,
+                    usePointStyle: true,
+                    callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%` }
+                },
+            },
+            layout: {
+                padding: { bottom: 10 }
             },
             scales: {
                 y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                x: { grid: { display: false } },
+                x: { grid: { color: 'rgba(0,0,0,0.04)' } },
             },
         },
     }));
 
-    /* ── Users per cohort bar ── */
+    /* ── Month 1 Retention per Cohort (Horizontal Bar Chart) ── */
+    const m1Retention = COHORT_DATA.retention.map(row => row[1] !== undefined ? row[1] : null);
+
+    // Create an array of strings formatted like "9.4%" for datalabels, or empty for null
+    const m1Labels = m1Retention.map(val => val !== null ? `${val.toFixed(1)}%` : '');
+
     const ctxBar = document.getElementById('cohortBarChart').getContext('2d');
-    const barGrad = ctxBar.createLinearGradient(0, 0, 0, 300);
-    barGrad.addColorStop(0, COLORS.teal);
-    barGrad.addColorStop(1, hexAlpha(COLORS.teal, 0.4));
 
     registerChart('cohortBar', new Chart(ctxBar, {
         type: 'bar',
         data: {
             labels: COHORT_DATA.months,
             datasets: [{
-                label: 'Novos Usuários',
-                data: COHORT_DATA.users,
-                backgroundColor: barGrad,
-                borderRadius: 6,
+                label: 'Retenção Mês 1',
+                data: m1Retention,
+                backgroundColor: cohortColors,
+                borderRadius: 2,
                 borderSkipped: false,
+                barThickness: 12, // Make bars thinner like reference
             }],
         },
         options: {
+            indexAxis: 'y', // Make it horizontal
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false, // Fill container
             plugins: {
                 legend: { display: false },
-                tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y.toLocaleString('pt-BR')} usuários` } },
+                tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x}%` } },
+                // Enable DataLabels plugin if it's imported globally via Chart.js
+                datalabels: {
+                    anchor: 'end',
+                    align: 'right',
+                    formatter: (value, context) => m1Labels[context.dataIndex],
+                    font: { weight: 'bold', size: 11 },
+                    color: '#333'
+                }
             },
             scales: {
-                y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => (v / 1000).toFixed(0) + 'K' } },
-                x: { grid: { display: false }, ticks: { maxRotation: 45 } },
+                x: {
+                    min: 0,
+                    max: 30, // Fit the highest value (~24%)
+                    grid: { color: 'rgba(0,0,0,0.04)' },
+                    ticks: { callback: v => v + '%' }
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: { padding: 10 }
+                },
             },
         },
+        // Only load plugin if it exists in window
+        plugins: window.ChartDataLabels ? [window.ChartDataLabels] : []
     }));
 }

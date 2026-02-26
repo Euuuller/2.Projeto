@@ -39,7 +39,7 @@
 }
 
 .bh-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 1.4rem;
     font-weight: 700;
     color: #fff;
@@ -164,7 +164,7 @@
 }
 
 .impact-num {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 2rem;
     font-weight: 500;
     line-height: 1;

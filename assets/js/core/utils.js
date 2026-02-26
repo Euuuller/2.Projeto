@@ -59,15 +59,20 @@ function lerpColor(c1, c2, t) {
 
 /**
  * Map a retention percentage (0-100) to a heatmap cell colour.
- * Palette: deep indigo (high) → mid indigo → light lavender (low).
+ * Palette: Red (0%) → Yellow (Mid) → Green (100%).
  * @param {number} pct
- * @returns {string} rgb() string
+ * @returns {string} hex string
  */
 function heatmapColor(pct) {
-    const p = pct / 100;
-    if (p >= 0.75) return lerpColor('#4338CA', '#1E1B4B', (p - 0.75) / 0.25);
-    if (p >= 0.40) return lerpColor('#818CF8', '#4338CA', (p - 0.40) / 0.35);
-    return lerpColor('#EEF2FF', '#818CF8', p / 0.40);
+    if (pct === 100) return '#62c174'; // Green for 100%
+    if (pct === 0) return '#f45a5d';   // Red for 0%
+
+    // Gradient between bright yellow and lighter red for middle values
+    if (pct >= 15) return '#f0d96d'; // Bright Yellow
+    if (pct >= 8) return '#f1ef87'; // Pale Yellow
+    if (pct > 0) return '#f08969'; // Orange-Red
+
+    return '#f45a5d'; // Fallback Red
 }
 
 /**
@@ -76,5 +81,5 @@ function heatmapColor(pct) {
  * @returns {string}
  */
 function textColorForBg(pct) {
-    return pct >= 35 ? '#fff' : '#334155';
+    return '#333333'; // Always dark text for this specific pastel scale
 }

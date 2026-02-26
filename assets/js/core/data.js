@@ -13,34 +13,36 @@ const COHORT_DATA = {
     ],
     users: [2791, 3815, 3500, 2075, 4024, 2864, 3560, 3454, 2683, 5717, 3128, 4210],
     retention: [
-        [100, 90, 71, 66, 51, 41, 35, 33, 22, 20, 19, 15],
-        [100, 83, 70, 62, 52, 43, 41, 29, 31, 27, 21],
-        [100, 87, 67, 62, 53, 48, 37, 32, 22, 23],
-        [100, 83, 73, 62, 53, 45, 34, 32, 29],
-        [100, 83, 70, 57, 55, 45, 39, 36],
-        [100, 84, 70, 57, 50, 47, 36],
-        [100, 84, 69, 64, 49, 40],
-        [100, 85, 72, 57, 47],
-        [100, 88, 74, 66],
-        [100, 82, 74],
-        [100, 86],
-        [100],
+        [100, 9.38, 0.00, 6.25, 6.25, 0.00, 6.25, 12.50, 15.63, 9.38, 21.88, 15.63],
+        [100, 16.67, 8.33, 4.17, 0.00, 8.33, 8.33, 12.50, 12.50, 16.67, 16.67, 0.00],
+        [100, 6.15, 3.08, 12.31, 10.77, 0.00, 10.77, 7.69, 12.31, 9.23, 0.00, 0.00],
+        [100, 10.71, 3.57, 7.14, 5.36, 14.29, 10.71, 16.07, 14.29, 0.00, 0.00, 0.00],
+        [100, 8.93, 8.93, 7.14, 17.86, 3.57, 21.43, 17.86, 0.00, 0.00, 0.00, 0.00],
+        [100, 2.08, 4.17, 8.33, 4.17, 18.75, 16.67, 0.00, 0.00, 0.00, 0.00, 0.00],
+        [100, 13.64, 11.36, 0.00, 11.36, 18.18, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+        [100, 16.33, 6.12, 22.45, 10.20, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+        [100, 13.24, 13.24, 16.18, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+        [100, 7.14, 11.90, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+        [100, 24.19, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+        [100, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
     ],
 };
 
 /* ── RFM Segmentation ────────────────────────────────────────────────────── */
 const RFM_SEGMENTS = [
-    { name: 'Champions', value: 1850, color: '#4338CA' },
-    { name: 'Potential Loyalist', value: 1200, color: '#6366F1' },
-    { name: 'Loyal Customers', value: 950, color: '#818CF8' },
-    { name: 'Recent Customers', value: 780, color: '#A5B4FC' },
-    { name: 'Promising', value: 640, color: '#0D9488' },
-    { name: 'Customers Needing Attn.', value: 520, color: '#14B8A6' },
-    { name: 'At Risk', value: 410, color: '#2DD4BF' },
-    { name: 'Hibernating', value: 310, color: '#34D399' },
-    { name: 'Cant Lose Them', value: 270, color: '#10B981' },
-    { name: 'Lost', value: 190, color: '#F59E0B' },
+    { name: 'Fiéis em potencial', value: 314, color: '#27befa', gridArea: 'fp', textColor: '#ffffff' },
+    { name: 'Clientes fiéis', value: 217, color: '#1664d4', gridArea: 'cf', textColor: '#ffffff' },
+    { name: 'Clientes perdidos', value: 83, color: '#e02424', gridArea: 'cp', textColor: '#ffffff' },
+    { name: 'Clientes em risco', value: 61, color: '#f59e0b', gridArea: 'cr', textColor: '#ffffff' },
+    { name: 'Campeões', value: 30, color: '#fcd34d', gridArea: 'ca', textColor: '#111827' },
+    { name: 'Clientes quase dormentes', value: 28, color: '#9ca3af', gridArea: 'cqd', textColor: '#ffffff' },
+    { name: 'Novos clientes', value: 18, color: '#68d391', gridArea: 'nc', textColor: '#ffffff' },
+    { name: 'Clientes que precisam de atenção', value: 17, color: '#f59e0b', gridArea: 'cpa', textColor: '#ffffff' },
+    { name: 'Clientes hibernando', value: 14, color: '#8b8bb5', gridArea: 'ch', textColor: '#ffffff' },
+    { name: 'Clientes promissores', value: 7, color: '#4ade80', gridArea: 'cpr', textColor: '#ffffff' },
+    { name: 'Clientes que não posso perder', value: 4, color: '#a855f7', gridArea: 'cnpp', textColor: '#ffffff' },
 ];
+
 
 /* ── Descriptive Analysis — Monthly Revenue 2020–2023 (USD) ──────────────── */
 const DESC_MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
