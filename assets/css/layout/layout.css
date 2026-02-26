@@ -1,0 +1,301 @@
+/* ==========================================================================
+   SuperStorys Analytics Dashboard
+   layout.css — App Shell, Sidebar, Topbar, Main Content
+   ========================================================================== */
+
+/* ── App shell ───────────────────────────────────────────────────────────── */
+.app {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app.hidden {
+    display: none;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar {
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg-sidebar);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 100;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Sidebar logo ────────────────────────────────────────────────────────── */
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--brand-primary), var(--accent-indigo));
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.logo-text {
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.sidebar-close {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-on-dark-muted);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
+.sidebar-nav {
+    padding: 1.25rem 0.75rem;
+    flex: 1;
+}
+
+.nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-on-dark-muted);
+    padding: 0 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--text-on-dark-muted);
+    font-size: 13.5px;
+    font-weight: 450;
+    transition: var(--transition);
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    background: var(--bg-sidebar-hover);
+    color: var(--text-on-dark);
+}
+
+.nav-item.active {
+    background: var(--bg-sidebar-active);
+    color: var(--brand-primary-light);
+    font-weight: 600;
+}
+
+.nav-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* ── Sidebar footer ──────────────────────────────────────────────────────── */
+.sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1.25rem;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.profile-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--brand-primary), var(--accent-teal));
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.profile-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-on-dark);
+}
+
+.profile-role {
+    font-size: 11px;
+    color: var(--text-on-dark-muted);
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.social-link {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    color: var(--text-on-dark-muted);
+    transition: var(--transition);
+    border-radius: var(--radius-sm);
+}
+
+.social-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.social-link:hover {
+    color: var(--brand-primary-light);
+    background: rgba(99, 102, 241, 0.15);
+}
+
+/* ── Mobile sidebar overlay ──────────────────────────────────────────────── */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+}
+
+/* ── Topbar (mobile only) ────────────────────────────────────────────────── */
+.topbar {
+    display: none;
+    height: var(--topbar-h);
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 1rem;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.topbar-brand {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+}
+
+.hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+/* ── Main content area ───────────────────────────────────────────────────── */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg-base);
+}
+
+/* ── Tab panels ──────────────────────────────────────────────────────────── */
+.tab-content {
+    display: none;
+    padding: 2rem 2.25rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+}
+
+.page-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.page-date {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 50px;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+}
+
+/* ── Intro text (blockquote-style) ───────────────────────────────────────── */
+.intro-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+    max-width: 860px;
+    border-left: 3px solid var(--brand-primary);
+    background: rgba(99, 102, 241, 0.04);
+    padding: 0.85rem 1rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}

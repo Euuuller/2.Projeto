@@ -1,0 +1,54 @@
+/* ==========================================================================
+   SuperStorys Analytics Dashboard
+   variables.css — Design Tokens (CSS Custom Properties)
+   ========================================================================== */
+
+:root {
+    /* ── Brand ─────────────────────────────────────────────────────────── */
+    --brand-primary: #4F46E5;
+    --brand-primary-light: #818CF8;
+    --brand-primary-dark: #3730A3;
+    --brand-secondary: #0EA5E9;
+
+    /* ── Accents ────────────────────────────────────────────────────────── */
+    --accent-indigo: #6366F1;
+    --accent-teal: #14B8A6;
+    --accent-rose: #F43F5E;
+    --accent-amber: #F59E0B;
+    --accent-purple: #A855F7;
+    --accent-emerald: #10B981;
+    --accent-orange: #F97316;
+
+    /* ── Neutrals ───────────────────────────────────────────────────────── */
+    --bg-base: #F8F9FC;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #0F172A;
+    --bg-sidebar-hover: #1E293B;
+    --bg-sidebar-active: rgba(99, 102, 241, 0.15);
+
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    --text-on-dark: #F1F5F9;
+    --text-on-dark-muted: #94A3B8;
+
+    --border-color: #E2E8F0;
+    --border-color-strong: #CBD5E1;
+
+    /* ── Shadows ────────────────────────────────────────────────────────── */
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
+    --shadow-card-hover: 0 8px 30px rgba(79, 70, 229, 0.12);
+
+    /* ── Sizing ─────────────────────────────────────────────────────────── */
+    --sidebar-w: 240px;
+    --topbar-h: 60px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+
+    /* ── Transitions ────────────────────────────────────────────────────── */
+    --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}

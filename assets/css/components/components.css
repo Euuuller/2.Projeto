@@ -1,0 +1,154 @@
+/* ==========================================================================
+   SuperStorys Analytics Dashboard
+   components.css — Reusable UI Components (Cards, Charts, Grids)
+   ========================================================================== */
+
+/* ── Section card ────────────────────────────────────────────────────────── */
+.section-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: box-shadow var(--transition);
+    margin-bottom: 1.25rem;
+}
+
+.section-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.section-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-card-title {
+    font-size: 15px;
+    font-weight: 650;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.section-card-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ── Chart wrappers ──────────────────────────────────────────────────────── */
+.chart-wrap {
+    padding: 1.25rem 1.5rem;
+    position: relative;
+    min-height: 260px;
+}
+
+.chart-wrap--tall {
+    min-height: 320px;
+}
+
+.chart-wrap canvas {
+    max-height: 320px;
+}
+
+/* ── 2-column chart grid ─────────────────────────────────────────────────── */
+.charts-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+/* ── KPI card row ────────────────────────────────────────────────────────── */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* ── KPI icon wrapper ────────────────────────────────────────────────────── */
+.kpi-icon-wrap {
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-md);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.kpi-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* ── KPI color themes ────────────────────────────────────────────────────── */
+.kpi-blue .kpi-icon-wrap {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-indigo);
+}
+
+.kpi-teal .kpi-icon-wrap {
+    background: rgba(20, 184, 166, 0.1);
+    color: var(--accent-teal);
+}
+
+.kpi-rose .kpi-icon-wrap {
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--accent-rose);
+}
+
+.kpi-amber .kpi-icon-wrap {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--accent-amber);
+}
+
+/* ── KPI text ────────────────────────────────────────────────────────────── */
+.kpi-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 450;
+    margin-bottom: 2px;
+}
+
+.kpi-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.kpi-delta {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.kpi-delta.positive {
+    color: var(--accent-emerald);
+}
+
+.kpi-delta.negative {
+    color: var(--accent-rose);
+}

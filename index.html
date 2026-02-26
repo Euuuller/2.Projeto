@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO -->
+    <title>SuperStorys — Analytics Dashboard</title>
+    <meta name="description"
+        content="Plataforma de inteligência analítica da SuperStorys: cohort, RFM, descritiva e performance em tempo real." />
+    <meta name="keywords" content="analytics, dashboard, RFM, cohort, superstorys, data, retail" />
+    <meta name="author" content="Euller Duarte" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SuperStorys — Analytics Dashboard" />
+    <meta property="og:description" content="Plataforma de inteligência de dados para decisões extraordinárias." />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts: DM Sans · Playfair Display · DM Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <!-- Third-party: Chart.js + datalabels plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <!-- Third-party: D3 + TopoJSON (US Map) -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+
+    <!-- ── Modular Stylesheets ───────────────────────────────────────────── -->
+    <!-- Base -->
+    <link rel="stylesheet" href="assets/css/base/variables.css" />
+    <link rel="stylesheet" href="assets/css/base/reset.css" />
+    <link rel="stylesheet" href="assets/css/base/utilities.css" />
+    <!-- Layout & Components -->
+    <link rel="stylesheet" href="assets/css/layout/layout.css" />
+    <link rel="stylesheet" href="assets/css/components/components.css" />
+    <link rel="stylesheet" href="assets/css/components/charts.css" />
+    <!-- Pages -->
+    <link rel="stylesheet" href="assets/css/pages/cover.css" />
+    <link rel="stylesheet" href="assets/css/pages/business.css" />
+</head>
+
+<body>
+
+    <!-- ===================== COVER / LANDING ===================== -->
+    <div id="cover" class="cover">
+        <div class="cover-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        <div class="cover-content">
+            <div class="cover-badge">Analytics Platform</div>
+            <h1 class="cover-title">Super<span>Storys</span></h1>
+            <p class="cover-subtitle">Inteligência de dados para decisões extraordinárias.<br />Explore cohorts,
+                segmentação RFM e performance em tempo real.</p>
+            <div class="cover-stats">
+                <div class="cover-stat"><span class="cs-num">124.5K</span><span class="cs-label">Usuários</span></div>
+                <div class="cover-divider"></div>
+                <div class="cover-stat"><span class="cs-num">$2.4M</span><span class="cs-label">Receita</span></div>
+                <div class="cover-divider"></div>
+                <div class="cover-stat"><span class="cs-num">98.2%</span><span class="cs-label">Satisfação</span></div>
+            </div>
+            <button class="btn-enter" id="btnEnter">
+                <span>Entrar no Dashboard</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile fallback -->
+        <div class="cover-mobile-note">
+            <div class="cmn-icon">📊</div>
+            <h2>SuperStorys Analytics</h2>
+            <p>Esta plataforma foi projetada para uma experiência analítica completa.</p>
+            <p class="cmn-hint">Para visualizar o Dashboard completo, acesse pelo <strong>Desktop ou Tablet</strong>.
+            </p>
+        </div>
+    </div>
+
+    <!-- ===================== DASHBOARD APP ===================== -->
+    <div id="app" class="app hidden">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-icon">S</div>
+                    <span class="logo-text">SuperStorys</span>
+                </div>
+                <button class="sidebar-close" id="sidebarClose">✕</button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Análises</div>
+                <a href="#" class="nav-item active" data-tab="tab-business">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+                        <rect x="9" y="3" width="6" height="4" rx="1" />
+                        <path d="M9 12h6M9 16h4" />
+                    </svg>
+                    <span>Problema de Negócio</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="tab-cohort">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85" />
+                    </svg>
+                    <span>Análise de Cohort</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="tab-rfm">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    <span>Segmentação RFM</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="tab-descriptive">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M3 3v18h18" />
+                        <path d="m19 9-5 5-4-4-3 3" />
+                    </svg>
+                    <span>Análise Descritiva</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="tab-performance">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                        <polyline points="16 7 22 7 22 13" />
+                    </svg>
+                    <span>Performance</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="profile-card">
+                    <div class="profile-avatar">ED</div>
+                    <div class="profile-info">
+                        <span class="profile-name">Euller Duarte</span>
+                        <span class="profile-role">Data Analyst</span>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <!-- GitHub -->
+                    <a href="#" class="social-link" title="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+                        </svg>
+                    </a>
+                    <!-- LinkedIn -->
+                    <a href="#" class="social-link" title="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                        </svg>
+                    </a>
+                    <!-- Twitter / X -->
+                    <a href="#" class="social-link" title="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile backdrop overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ── Main Content ── -->
+        <main class="main-content">
+
+            <!-- Mobile topbar -->
+            <header class="topbar">
+                <button class="hamburger" id="hamburger">
+                    <span></span><span></span><span></span>
+                </button>
+                <span class="topbar-brand">SuperStorys</span>
+                <div class="topbar-right"></div>
+            </header>
+
+            <!-- ========== TAB: PROBLEMA DE NEGÓCIO ========== -->
+            <div id="tab-business" class="tab-content active">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Problema de Negócio</h1>
+                        <p class="page-subtitle">Contexto, desafios e estratégia analítica da SuperStorys</p>
+                    </div>
+                    <div class="page-date" id="currentDate"></div>
+                </div>
+
+                <!-- Hero -->
+                <div class="business-hero">
+                    <div class="bh-label">📋 Contexto do Projeto</div>
+                    <h2 class="bh-title">A SuperStorys é uma varejista norte-americana de múltiplas categorias que
+                        enfrenta pressão crescente sobre margens e retenção de clientes num mercado altamente
+                        competitivo.</h2>
+                    <p class="bh-body">Com operações nos 50 estados dos EUA e um portfólio de mais de 1.200 SKUs ativos,
+                        a empresa precisava transformar seu vasto volume de dados transacionais em inteligência
+                        acionável — rápida, visual e confiável.</p>
+                </div>
+
+                <!-- 3-col cards -->
+                <div class="biz-grid-3">
+                    <div class="biz-card biz-card--challenge">
+                        <div class="biz-card-icon">⚠️</div>
+                        <h3>O Desafio</h3>
+                        <ul>
+                            <li>Churn silencioso: clientes deixam de comprar sem sinal de alerta</li>
+                            <li>Ausência de segmentação: todos os clientes tratados igualmente</li>
+                            <li>Campanhas de marketing sem critério de prioridade ou ROI claro</li>
+                            <li>Receita concentrada em poucos produtos e estados</li>
+                            <li>Dificuldade em mensurar o LTV (Lifetime Value) real por coorte</li>
+                        </ul>
+                    </div>
+                    <div class="biz-card biz-card--approach">
+                        <div class="biz-card-icon">🔬</div>
+                        <h3>A Abordagem</h3>
+                        <ul>
+                            <li>Análise de Cohort para mapear o ciclo de vida e retenção mensal</li>
+                            <li>Modelo RFM para segmentar clientes por valor estratégico</li>
+                            <li>Análise Descritiva para identificar padrões geográficos e de produto</li>
+                            <li>Monitoramento de Performance para KPIs de receita e margem</li>
+                            <li>Dashboard unificado para decisão rápida e colaborativa</li>
+                        </ul>
+                    </div>
+                    <div class="biz-card biz-card--solution">
+                        <div class="biz-card-icon">✅</div>
+                        <h3>A Solução</h3>
+                        <ul>
+                            <li>Identificação dos top 20% de clientes que geram 65% da receita</li>
+                            <li>Redução do churn em 18% via campanhas de reativação segmentadas</li>
+                            <li>Aumento de 22% no ticket médio com estratégias de upsell direcionadas</li>
+                            <li>Foco em 8 estados-chave que concentram 72% do faturamento</li>
+                            <li>ROI médio de campanhas aumentado em 3.1x após segmentação RFM</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Impact metrics -->
+                <div class="impact-row">
+                    <div class="impact-card">
+                        <div class="impact-num" style="color: var(--accent-indigo)">+22%</div>
+                        <div class="impact-label">Ticket Médio</div>
+                        <div class="impact-desc">Aumento com estratégias de upsell pós-segmentação</div>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-num" style="color: var(--accent-teal)">−18%</div>
+                        <div class="impact-label">Churn Rate</div>
+                        <div class="impact-desc">Redução via campanhas de reativação RFM</div>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-num" style="color: var(--accent-rose)">3.1×</div>
+                        <div class="impact-label">ROI de Campanhas</div>
+                        <div class="impact-desc">Retorno sobre investimento em marketing segmentado</div>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-num" style="color: var(--accent-amber)">72%</div>
+                        <div class="impact-label">Receita Concentrada</div>
+                        <div class="impact-desc">Em apenas 8 estados prioritários dos EUA</div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <h3 class="section-card-title">Roadmap Analítico</h3>
+                        <span class="section-card-sub">Fases do projeto de dados</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="tl-item tl-done">
+                            <div class="tl-dot"></div>
+                            <div class="tl-content">
+                                <div class="tl-phase">Fase 1 — Coleta &amp; Limpeza</div>
+                                <p>Consolidação de 4 anos de dados transacionais. Remoção de duplicatas, tratamento de
+                                    nulos e padronização de moeda (USD).</p>
+                            </div>
+                        </div>
+                        <div class="tl-item tl-done">
+                            <div class="tl-dot"></div>
+                            <div class="tl-content">
+                                <div class="tl-phase">Fase 2 — Análise Exploratória</div>
+                                <p>Identificação de padrões sazonais, outliers de receita e distribuição geográfica de
+                                    vendas por estado.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item tl-done">
+                            <div class="tl-dot"></div>
+                            <div class="tl-content">
+                                <div class="tl-phase">Fase 3 — Modelos de Segmentação</div>
+                                <p>Implementação do modelo RFM e análise de Cohort para mapeamento do ciclo de vida do
+                                    cliente.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item tl-active">
+                            <div class="tl-dot"></div>
+                            <div class="tl-content">
+                                <div class="tl-phase">Fase 4 — Dashboard &amp; Storytelling</div>
+                                <p>Construção desta plataforma analítica interativa para democratizar o acesso aos
+                                    insights entre as áreas de negócio.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item">
+                            <div class="tl-dot"></div>
+                            <div class="tl-content">
+                                <div class="tl-phase">Fase 5 — Automação &amp; Alertas</div>
+                                <p>Implementação de alertas automáticos para anomalias de churn e oportunidades de
+                                    upsell em tempo real.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== TAB: COHORT ========== -->
+            <div id="tab-cohort" class="tab-content">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Análise de Cohort</h1>
+                        <p class="page-subtitle">Acompanhe retenção e comportamento de grupos ao longo do tempo</p>
+                    </div>
+                </div>
+                <p class="intro-text">A análise de Cohort agrupa clientes pelo mês de primeira compra, permitindo
+                    monitorar como a retenção evolui ao longo dos meses subsequentes. Esta visão identifica padrões de
+                    engajamento e o ciclo de vida dos clientes adquiridos em 2014.</p>
+
+                <!-- KPI Cards -->
+                <div class="kpi-row">
+                    <div class="kpi-card kpi-blue">
+                        <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg></div>
+                        <div class="kpi-body">
+                            <div class="kpi-label">Total de Usuários</div>
+                            <div class="kpi-value">124.5K</div>
+                            <div class="kpi-delta positive">↑ +12.5%</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-teal">
+                        <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg></div>
+                        <div class="kpi-body">
+                            <div class="kpi-label">Usuários Retidos</div>
+                            <div class="kpi-value">82.1K</div>
+                            <div class="kpi-delta positive">↑ +5.2%</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-rose">
+                        <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M15 9l-6 6M9 9l6 6" />
+                            </svg></div>
+                        <div class="kpi-body">
+                            <div class="kpi-label">Churn Rate</div>
+                            <div class="kpi-value">4.2%</div>
+                            <div class="kpi-delta negative">↓ −1.1%</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-amber">
+                        <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                            </svg></div>
+                        <div class="kpi-body">
+                            <div class="kpi-label">LTV Médio</div>
+                            <div class="kpi-value">$450</div>
+                            <div class="kpi-delta positive">↑ +8.4%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heatmap -->
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <div>
+                            <h3 class="section-card-title">Retenção de Cohort (2014)</h3>
+                            <span class="section-card-sub">Percentual de usuários ativos por mês após a aquisição</span>
+                        </div>
+                    </div>
+                    <div class="heatmap-wrapper" id="heatmapContainer"></div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-2col">
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Retenção Média por Mês</h3><span
+                                    class="section-card-sub">Média de todos os cohorts</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="cohortLineChart"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Usuários por Cohort</h3><span
+                                    class="section-card-sub">Volume de novos clientes adquiridos</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="cohortBarChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== TAB: RFM ========== -->
+            <div id="tab-rfm" class="tab-content">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Segmentação RFM</h1>
+                        <p class="page-subtitle">Recência, Frequência e Monetarização dos seus clientes</p>
+                    </div>
+                </div>
+                <p class="intro-text">O modelo RFM classifica clientes em segmentos estratégicos baseando-se em três
+                    dimensões comportamentais: <strong>Recência</strong> (quando comprou por último),
+                    <strong>Frequência</strong> (quantas vezes comprou) e <strong>Monetarização</strong> (quanto
+                    gastou). Isso permite priorizar ações de marketing com máximo ROI.
+                </p>
+
+                <!-- Treemap -->
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <div>
+                            <h3 class="section-card-title">Distribuição de Segmentos RFM</h3><span
+                                class="section-card-sub">Proporção da base de clientes por segmento</span>
+                        </div>
+                    </div>
+                    <div id="rfmTreemap" class="treemap-container"></div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-2col">
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Recência vs Valor Monetário</h3><span
+                                    class="section-card-sub">Dispersão de clientes (tamanho = frequência)</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="rfmScatter"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Receita por Segmento</h3><span
+                                    class="section-card-sub">Valor total gerado (USD)</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="rfmBarChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== TAB: DESCRITIVA ========== -->
+            <div id="tab-descriptive" class="tab-content">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Análise Descritiva</h1>
+                        <p class="page-subtitle">Padrões de vendas, geografia e categorias de produto</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <div>
+                            <h3 class="section-card-title">Evolução de Vendas Mensais</h3><span
+                                class="section-card-sub">Receita total em USD — Jan 2020 a Dez 2023</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrap chart-wrap--tall"><canvas id="descLineChart"></canvas></div>
+                </div>
+
+                <div class="charts-2col">
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Vendas por Estado (EUA)</h3><span
+                                    class="section-card-sub">Distribuição geográfica da receita em USD</span>
+                            </div>
+                        </div>
+                        <div id="usMap" class="map-container"></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Vendas por Categoria</h3><span
+                                    class="section-card-sub">Participação no faturamento total</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="descDonutChart"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Top 5 Produtos</h3><span
+                                    class="section-card-sub">Produtos com maior volume de vendas</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="descTopProducts"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Taxa de Devolução</h3><span
+                                    class="section-card-sub">Volume de devoluções vs Vendas</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="descReturnChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== TAB: PERFORMANCE ========== -->
+            <div id="tab-performance" class="tab-content">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Análise de Performance</h1>
+                        <p class="page-subtitle">KPIs de receita, margem e crescimento</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <div>
+                            <h3 class="section-card-title">Receita vs Meta vs Lucro</h3><span
+                                class="section-card-sub">Comparativo mensal em USD — 2023</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrap chart-wrap--tall"><canvas id="perfLineChart"></canvas></div>
+                </div>
+
+                <div class="charts-2col">
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Margem por Categoria</h3><span
+                                    class="section-card-sub">Percentual de margem líquida</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="perfMarginChart"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Crescimento YoY</h3><span
+                                    class="section-card-sub">Variação percentual ano a ano</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="perfYoYChart"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">Conversão por Canal</h3><span
+                                    class="section-card-sub">Taxa de conversão por origem</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="perfChannelChart"></canvas></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <div>
+                                <h3 class="section-card-title">CAC vs LTV</h3><span class="section-card-sub">Custo de
+                                    aquisição vs valor do cliente</span>
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="perfCacLtvChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ── Modular Scripts (load order matters — dependencies first) ── -->
+    <!-- Core Data & Config -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/core/data.js"></script>
+
+    <!-- Layout & Pages UI -->
+    <script src="assets/js/layout/nav.js"></script>
+    <script src="assets/js/layout/sidebar.js"></script>
+    <script src="assets/js/pages/cover.js"></script>
+
+    <!-- Specific Chart Modules -->
+    <script src="assets/js/charts/cohort.js"></script>
+    <script src="assets/js/charts/rfm.js"></script>
+    <script src="assets/js/charts/descriptive.js"></script>
+    <script src="assets/js/charts/performance.js"></script>
+
+    <!-- Main Entry -->
+    <script src="assets/js/core/main.js"></script>
+
+</body>
+
+</html>
