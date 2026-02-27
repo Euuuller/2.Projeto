@@ -30,29 +30,55 @@ const COHORT_DATA = {
 
 /* ── RFM Segmentation ────────────────────────────────────────────────────── */
 const RFM_SEGMENTS = [
-    { name: 'Fiéis em potencial', value: 314, color: '#27befa', gridArea: 'fp', textColor: '#ffffff' },
-    { name: 'Clientes fiéis', value: 217, color: '#1664d4', gridArea: 'cf', textColor: '#ffffff' },
-    { name: 'Clientes perdidos', value: 83, color: '#e02424', gridArea: 'cp', textColor: '#ffffff' },
-    { name: 'Clientes em risco', value: 61, color: '#f59e0b', gridArea: 'cr', textColor: '#ffffff' },
-    { name: 'Campeões', value: 30, color: '#fcd34d', gridArea: 'ca', textColor: '#111827' },
-    { name: 'Clientes quase dormentes', value: 28, color: '#9ca3af', gridArea: 'cqd', textColor: '#ffffff' },
-    { name: 'Novos clientes', value: 18, color: '#68d391', gridArea: 'nc', textColor: '#ffffff' },
-    { name: 'Clientes que precisam de atenção', value: 17, color: '#f59e0b', gridArea: 'cpa', textColor: '#ffffff' },
-    { name: 'Clientes hibernando', value: 14, color: '#8b8bb5', gridArea: 'ch', textColor: '#ffffff' },
-    { name: 'Clientes promissores', value: 7, color: '#4ade80', gridArea: 'cpr', textColor: '#ffffff' },
-    { name: 'Clientes que não posso perder', value: 4, color: '#a855f7', gridArea: 'cnpp', textColor: '#ffffff' },
+    { name: 'Fiéis em potencial', value: 314, color: '#27befa', gridArea: 'fp', textColor: '#ffffff', strategy: 'Aumentar frequência, ofertas' },
+    { name: 'Clientes fiéis', value: 217, color: '#1664d4', gridArea: 'cf', textColor: '#ffffff', strategy: 'Upselling, programas VIP' },
+    { name: 'Clientes perdidos', value: 83, color: '#e02424', gridArea: 'cp', textColor: '#ffffff', strategy: 'Campanha massiva' },
+    { name: 'Clientes em risco', value: 61, color: '#f59e0b', gridArea: 'cr', textColor: '#ffffff', strategy: 'Recuperação urgente' },
+    { name: 'Campeões', value: 30, color: '#fcd34d', gridArea: 'ca', textColor: '#111827', strategy: 'Recompensar, buscar embaixadores' },
+    { name: 'Clientes quase dormentes', value: 28, color: '#9ca3af', gridArea: 'cqd', textColor: '#ffffff', strategy: 'Última tentativa de resgate' },
+    { name: 'Novos clientes', value: 18, color: '#68d391', gridArea: 'nc', textColor: '#ffffff', strategy: 'Onboarding, experiências' },
+    { name: 'Clientes que precisam de atenção', value: 17, color: '#f59e0b', gridArea: 'cpa', textColor: '#ffffff', strategy: 'Reengajamento imediato' },
+    { name: 'Clientes hibernando', value: 14, color: '#8b8bb5', gridArea: 'ch', textColor: '#ffffff', strategy: 'Reativação com desconto' },
+    { name: 'Clientes promissores', value: 7, color: '#4ade80', gridArea: 'cpr', textColor: '#ffffff', strategy: 'Criar hábito de compra' },
+    { name: 'Clientes que não posso perder', value: 4, color: '#a855f7', gridArea: 'cnpp', textColor: '#ffffff', strategy: 'Win-back premium' },
 ];
 
+/* ── RFM Scatter Data (Recency vs Monetary) ──────────────────────────────── */
+const RFM_SCATTER_DATA = [
+    { name: "Fiéis em Potencial", recency: 56.06, monetary: 1825.01, count: 314, pct: 39.60 },
+    { name: "Clientes Fiéis", recency: 69.37, monetary: 4972.90, count: 217, pct: 27.36 },
+    { name: "Clientes Perdidos", recency: 520.66, monetary: 825.32, count: 83, pct: 10.47 },
+    { name: "Clientes em Risco", recency: 415.85, monetary: 3849.04, count: 61, pct: 7.69 },
+    { name: "Campeões", recency: 29.30, monetary: 7210.17, count: 30, pct: 3.78 },
+    { name: "Clientes Quase Dormentes", recency: 179.82, monetary: 967.49, count: 28, pct: 3.53 },
+    { name: "Novos Clientes", recency: 33.72, monetary: 467.21, count: 18, pct: 2.27 },
+    { name: "Clientes Que Precisam De Atenção", recency: 186.06, monetary: 2300.33, count: 17, pct: 2.14 },
+    { name: "Clientes Hibernando", recency: 248.36, monetary: 1001.69, count: 14, pct: 1.77 },
+    { name: "Clientes Promissores", recency: 93.29, monetary: 425.45, count: 7, pct: 0.88 },
+    { name: "Clientes Que Não Posso Perder", recency: 340.25, monetary: 8455.84, count: 4, pct: 0.50 }
+];
 
-/* ── Descriptive Analysis — Monthly Revenue 2020–2023 (USD) ──────────────── */
-const DESC_MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+/* ── RFM Revenue Data (Receita por Segmento) ─────────────────────────────── */
+const RFM_REVENUE_DATA = [
+    { name: "Campeões", revenue: 216305.27 },
+    { name: "Clientes em risco", revenue: 234791.23 },
+    { name: "Clientes fiéis", revenue: 1079119.11 },
+    { name: "Clientes hibernando", revenue: 14023.62 },
+    { name: "Clientes perdidos", revenue: 68501.41 },
+    { name: "Clientes promissores", revenue: 2978.13 },
+    { name: "Clientes quase dormentes", revenue: 27089.71 },
+    { name: "Clientes que não posso perder", revenue: 33823.39 },
+    { name: "Clientes que precisam de atenção", revenue: 39105.70 },
+    { name: "Fiéis em potencial", revenue: 573053.59 },
+    { name: "Novos clientes", revenue: 8409.71 }
+];
 
-const DESC_REVENUE = {
-    2020: [148000, 132000, 155000, 140000, 162000, 175000, 189000, 201000, 195000, 210000, 228000, 265000],
-    2021: [170000, 158000, 181000, 195000, 208000, 221000, 235000, 249000, 238000, 261000, 279000, 310000],
-    2022: [195000, 181000, 210000, 225000, 238000, 252000, 266000, 281000, 272000, 295000, 319000, 358000],
-    2023: [220000, 205000, 235000, 252000, 267000, 284000, 299000, 315000, 308000, 331000, 356000, 402000],
-};
+/* ── Descriptive Analysis — Monthly Orders & Trend ──────────────────────── */
+const DESC_MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
+const DESC_ORDERS_DATA = [381, 300, 696, 668, 735, 717, 710, 706, 1383, 819, 1471, 1408];
+// Trend calculated via linear regression over the array: starts around 329, ends around 1336
+const DESC_ORDERS_TREND = [329, 421, 512, 604, 696, 787, 879, 970, 1062, 1153, 1245, 1336];
 
 /* ── US State Sales (USD) ────────────────────────────────────────────────── */
 const STATE_SALES = {

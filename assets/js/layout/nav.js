@@ -39,5 +39,6 @@ function switchTab(tabId) {
     if (tabId === 'tab-cohort' && !chartRegistry['cohortLine']) initCohortCharts();
     if (tabId === 'tab-rfm' && !chartRegistry['rfmScatter']) initRFMCharts();
     if (tabId === 'tab-descriptive' && !chartRegistry['descLine']) initDescriptiveCharts();
+    if (tabId === 'tab-regional' && !chartRegistry['regionalMap']) initRegionalCharts();
     if (tabId === 'tab-performance' && !chartRegistry['perfLine']) initPerformanceCharts();
 }

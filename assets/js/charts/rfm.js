@@ -70,77 +70,197 @@ function initRFMCharts() {
     initRFMTreemap();
 
     /* ── Bubble scatter: Recency vs Monetary ── */
-    const scatterData = [];
-    for (let i = 0; i < 60; i++) {
-        const seg = RFM_SEGMENTS[Math.floor(Math.random() * RFM_SEGMENTS.length)];
-        scatterData.push({
-            x: Math.round(Math.random() * 95 + 5),
-            y: Math.round(Math.random() * 5500 + 200),
-            r: Math.round(Math.random() * 18 + 5),
-            color: seg.color,
-        });
-    }
+    // Map colors from RFM_SEGMENTS to a dictionary for quick lookup (case-insensitive)
+    const segmentColors = {};
+    RFM_SEGMENTS.forEach(seg => {
+        segmentColors[seg.name.toLowerCase()] = seg.color;
+    });
+
+    const scatterDatasets = RFM_SCATTER_DATA.map(item => {
+        const c = segmentColors[item.name.toLowerCase()] || '#64748B';
+        // Base size 6px, max size approx 40px for count=314
+        const rSize = 6 + (item.count / 314) * 34;
+
+        return {
+            label: item.name,
+            data: [{
+                x: item.recency,
+                y: item.monetary,
+                r: rSize,
+                _count: item.count,
+                _pct: item.pct
+            }],
+            backgroundColor: hexAlpha(c, 0.75),
+            borderColor: c,
+            borderWidth: 1,
+        };
+    });
 
     const ctxScatter = document.getElementById('rfmScatter').getContext('2d');
     registerChart('rfmScatter', new Chart(ctxScatter, {
         type: 'bubble',
         data: {
-            datasets: [{
-                label: 'Clientes',
-                data: scatterData,
-                backgroundColor: scatterData.map(d => hexAlpha(d.color, 0.55)),
-                borderColor: scatterData.map(d => d.color),
-                borderWidth: 1,
-            }],
+            datasets: scatterDatasets,
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false, // Set to false to allow custom height/layout with legend
+            layout: { padding: { right: 10 } },
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: true,
+                    position: 'right',
+                    align: 'start',
+                    labels: {
+                        usePointStyle: true,
+                        boxWidth: 8,
+                        boxHeight: 8,
+                        font: { size: 11, family: "'Plus Jakarta Sans', sans-serif" },
+                        padding: 12
+                    }
+                },
                 tooltip: {
                     callbacks: {
                         label: ctx => {
                             const d = ctx.raw;
-                            return [`Recência: ${d.x} dias`, `Monetário: $${d.y.toLocaleString()}`, `Frequência: ${d.r}`];
+                            return [
+                                `Segmento: ${ctx.dataset.label}`,
+                                `Recência Média: ${d.x.toFixed(1)} dias`,
+                                `Monetário Médio: $${d.y.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                                `Clientes: ${d._count} (${d._pct}%)`
+                            ];
                         },
                     },
                 },
             },
             scales: {
-                x: { title: { display: true, text: 'Recência (dias)', color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                y: { title: { display: true, text: 'Monetário ($)', color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => '$' + v.toLocaleString() } },
+                x: {
+                    title: { display: true, text: 'Recência Média', color: '#64748B', font: { size: 11 } },
+                    grid: { color: 'rgba(0,0,0,0.04)' }
+                },
+                y: {
+                    title: { display: true, text: 'Monetização Média', color: '#64748B', font: { size: 11 } },
+                    grid: { color: 'rgba(0,0,0,0.04)' },
+                    ticks: { callback: v => '$' + v.toLocaleString() }
+                },
             },
         },
     }));
 
     /* ── Horizontal bar: Revenue per segment ── */
+    const revenueDataSorted = [...RFM_REVENUE_DATA].sort((a, b) => b.revenue - a.revenue);
+
+    // Revenue formatted strings for datalabels
+    const revenueLabels = revenueDataSorted.map(item => '$' + item.revenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
     const ctxBar = document.getElementById('rfmBarChart').getContext('2d');
     registerChart('rfmBar', new Chart(ctxBar, {
         type: 'bar',
         data: {
-            labels: ['Champions', 'Loyal', 'Potential', 'At Risk', 'Lost'],
+            labels: revenueDataSorted.map(s => s.name),
             datasets: [{
                 label: 'Receita (USD)',
-                data: [61200, 38400, 28000, 12500, 5100],
-                backgroundColor: [COLORS.indigo, '#818CF8', '#94A3B8', '#CBD5E1', '#E2E8F0'],
-                borderRadius: 6,
+                data: revenueDataSorted.map(s => s.revenue),
+                backgroundColor: revenueDataSorted.map(s => segmentColors[s.name.toLowerCase()] || '#94A3B8'),
+                borderRadius: 4,
                 borderSkipped: false,
-                borderWidth: 0,
+                barThickness: 16,
             }],
         },
         options: {
             indexAxis: 'y',
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false, // allowing the tall chart-wrap CSS to dictate height
             plugins: {
                 legend: { display: false },
-                tooltip: { callbacks: { label: ctx => ` Receita : $${ctx.parsed.x.toLocaleString()}` } },
+                tooltip: { callbacks: { label: ctx => ` Receita : $${ctx.parsed.x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'right',
+                    formatter: (value, context) => revenueLabels[context.dataIndex],
+                    font: { weight: 'bold', size: 11 },
+                    color: '#333'
+                }
             },
             scales: {
-                x: { ticks: { callback: v => '$' + (v / 1000) + 'k' }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                y: { grid: { display: false } },
+                x: {
+                    ticks: { callback: v => '$' + (v / 1000) + 'k' },
+                    grid: { color: 'rgba(0,0,0,0.04)' },
+                    suggestedMax: Math.max(...revenueDataSorted.map(s => s.revenue)) * 1.3 // 1.3 avoids cutting off large string labels like '$1,079,119.11'
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: { padding: 10 }
+                },
             },
         },
+        plugins: window.ChartDataLabels ? [window.ChartDataLabels] : []
     }));
+
+    /* ── Horizontal bar: Volume per segment ── */
+    const ctxVolume = document.getElementById('rfmVolumeChart');
+    if (ctxVolume) {
+        // Create an array of strings formatted like "314" for datalabels
+        const volumeLabels = RFM_SEGMENTS.map(seg => seg.value.toString());
+
+        registerChart('rfmVolume', new Chart(ctxVolume.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: RFM_SEGMENTS.map(s => s.name),
+                datasets: [{
+                    label: 'Volume de Clientes',
+                    data: RFM_SEGMENTS.map(s => s.value),
+                    backgroundColor: RFM_SEGMENTS.map(s => s.color),
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    barThickness: 16,
+                }],
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: ctx => ` Qtd: ${ctx.parsed.x}` } },
+                    // Enable DataLabels plugin if it's imported globally
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'right',
+                        formatter: (value, context) => volumeLabels[context.dataIndex],
+                        font: { weight: 'bold', size: 11 },
+                        color: '#333'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        suggestedMax: Math.max(...RFM_SEGMENTS.map(s => s.value)) * 1.15 // Give space for labels
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { padding: 10 }
+                    },
+                },
+            },
+            plugins: window.ChartDataLabels ? [window.ChartDataLabels] : []
+        }));
+    }
+
+    /* ── Ações por Segmento Table ── */
+    const tableBody = document.getElementById('rfmActionTableBody');
+    if (tableBody) {
+        tableBody.innerHTML = RFM_SEGMENTS.map(seg => `
+            <tr>
+                <td>
+                    <div class="rfm-segment-name">
+                        <div class="rfm-segment-dot" style="background-color: ${seg.color}"></div>
+                        ${seg.name}
+                    </div>
+                </td>
+                <td style="text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;">${seg.value}</td>
+                <td class="rfm-strategy-text">${seg.strategy}</td>
+            </tr>
+        `).join('');
+    }
 }
